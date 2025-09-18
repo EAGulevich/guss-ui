@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 
-import { LayoutForPages } from "./Layout.tsx";
-
 const RoundListPage = () => {
   return (
-    <LayoutForPages>
+    <div>
       RoundListPage
       <div>
         <Link to="/">Login</Link>
@@ -21,7 +19,7 @@ const RoundListPage = () => {
         {" "}
         <Link to="/sdaf">not found</Link>
       </div>
-    </LayoutForPages>
+    </div>
   );
 };
 

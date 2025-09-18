@@ -1,5 +1,5 @@
 export const ROUTES = {
-  LOGIN: { path: "/login" },
+  LOGIN: { path: "/" },
   ROUNDS: { path: "/rounds" },
   ROUND: { path: "/round/:id" },
   NOT_FOUND: { path: "*" },

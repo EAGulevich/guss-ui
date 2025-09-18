@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 interface UserStore {
-  user: { id: number; username: string; role: string } | null;
+  user: { id: string; username: string; role: string } | null;
   setUser: (user: UserStore["user"]) => void;
 }
 
