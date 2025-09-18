@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Col, List, Row } from "antd";
-import axios from "axios";
 
+import { api } from "../../api/api.ts";
 import { ROUTES } from "../../routes.ts";
 import { useUserStore } from "../../store.ts";
 import { CardWrapper, RoundItem, RoundsListPageWrapper } from "./styles.tsx";
@@ -20,9 +20,7 @@ const RoundListPage = () => {
 
   useEffect(() => {
     const fetchRounds = async () => {
-      const response = await axios.get<Round[]>("/api/rounds", {
-        withCredentials: true,
-      });
+      const response = await api.get<Round[]>("/rounds");
 
       setRounds(response.data);
     };
@@ -31,13 +29,7 @@ const RoundListPage = () => {
 
   const createRound = async () => {
     try {
-      const response = await axios.post<{ round: Round }>(
-        "/api/rounds",
-        {
-          /* данные для создания раунда */
-        },
-        { withCredentials: true },
-      );
+      const response = await api.post<{ round: Round }>("/rounds");
 
       navigate(`${ROUTES.ROUND.to({ id: response.data.round.id })}`);
     } catch (error) {

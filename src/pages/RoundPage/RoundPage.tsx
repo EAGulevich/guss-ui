@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Typography } from "antd";
-import axios from "axios";
 
+import { api } from "../../api/api.ts";
 import { GUSS } from "./GUSS.ts";
 
 interface RoundInfo {
@@ -20,9 +20,7 @@ const RoundPage = () => {
 
   useEffect(() => {
     const fetchInfo = async () => {
-      const response = await axios.get<RoundInfo>(`/api/rounds/${id}`, {
-        withCredentials: true,
-      });
+      const response = await api.get<RoundInfo>(`/rounds/${id}`, {});
       setInfo(response.data);
     };
     fetchInfo();
@@ -32,11 +30,7 @@ const RoundPage = () => {
   }, [id]);
 
   const handleTap = async () => {
-    const response = await axios.post<{ myPoints: 61 }>(
-      `/api/rounds/${id}/tap`,
-      {},
-      { withCredentials: true },
-    );
+    const response = await api.post<{ myPoints: number }>(`/rounds/${id}/tap`);
     setPoints(response.data.myPoints);
     // TODO: обработать ошибку
   };

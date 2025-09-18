@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Form, type FormProps, Input } from "antd";
-import axios from "axios";
 
+import { api } from "../../api/api.ts";
 import { ROUTES } from "../../routes.ts";
 import { useUserStore } from "../../store.ts";
 import { LoginPageWrapper } from "./styles.tsx";
@@ -18,13 +18,12 @@ const LoginPage = () => {
   const handleLogin: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
       // TODO: ТИПИЗАЦИЯ
-      const res = await axios.post<{
+      const res = await api.post<{
         user: { id: string; username: string; role: string };
-      }>(
-        "/api/auth/login",
-        { username: values.username, password: values.password },
-        { withCredentials: true },
-      );
+      }>("/auth/login", {
+        username: values.username,
+        password: values.password,
+      });
       setUser(res.data.user);
       navigate(ROUTES.ROUNDS.to);
     } catch (err) {
