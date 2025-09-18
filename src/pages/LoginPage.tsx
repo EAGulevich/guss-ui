@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 
+import { LayoutForPages } from "./Layout.tsx";
+
 const LoginPage = () => {
   return (
-    <div>
+    <LayoutForPages>
       LoginPage
       <div>
         <Link to="/">Login</Link>
@@ -19,7 +21,7 @@ const LoginPage = () => {
         {" "}
         <Link to="/sdaf">not found</Link>
       </div>
-    </div>
+    </LayoutForPages>
   );
 };
 

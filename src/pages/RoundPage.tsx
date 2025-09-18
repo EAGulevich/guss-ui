@@ -1,10 +1,12 @@
 import { Link, useParams } from "react-router-dom";
 
+import { LayoutForPages } from "./Layout.tsx";
+
 const RoundPage = () => {
   // TODO: типизация параметров
   const { id } = useParams();
   return (
-    <div>
+    <LayoutForPages>
       RoundPage with id = {id}
       <div>
         <Link to="/">Login</Link>
@@ -21,7 +23,7 @@ const RoundPage = () => {
         {" "}
         <Link to="/sdaf">not found</Link>
       </div>
-    </div>
+    </LayoutForPages>
   );
 };
 
