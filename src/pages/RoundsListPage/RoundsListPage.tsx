@@ -32,7 +32,7 @@ const RoundListPage = () => {
 
   const createRound = async () => {
     try {
-      const response = await axios.post<Round>(
+      const response = await axios.post<{ round: Round }>(
         "http://localhost:3000/rounds",
         {
           /* данные для создания раунда */
@@ -40,7 +40,7 @@ const RoundListPage = () => {
         { withCredentials: true },
       );
 
-      navigate(`${ROUTES.ROUND.to({ id: response.data.id })}`);
+      navigate(`${ROUTES.ROUND.to({ id: response.data.round.id })}`);
     } catch (error) {
       //   todo
       console.log(error);
