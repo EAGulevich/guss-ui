@@ -1,6 +1,9 @@
 export const ROUTES = {
-  LOGIN: { path: "/" },
-  ROUNDS: { path: "/rounds" },
-  ROUND: { path: "/round/:id" },
-  NOT_FOUND: { path: "*" },
+  LOGIN: { to: "/", path: "/" },
+  ROUNDS: { to: "/rounds", path: "/rounds" },
+  ROUND: {
+    to: (params: { id: string }) => `/rounds/${params.id}`,
+    path: "/rounds/:id",
+  },
+  NOT_FOUND: { to: "*", path: "/*" },
 };

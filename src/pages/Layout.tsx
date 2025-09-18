@@ -8,15 +8,21 @@ const layoutStyles: CSSProperties = {
   maxHeight: "100vh",
 };
 
+const contentStyles: CSSProperties = {
+  overflow: "auto",
+  //   TODO
+  height: "calc(100vh - 64px - 70px)",
+};
+
 export const LayoutForPages: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Layout style={layoutStyles}>
       <Layout.Header>
         <Header />
       </Layout.Header>
-      <Layout.Content>{children}</Layout.Content>
+      <Layout.Content style={contentStyles}>{children}</Layout.Content>
       <Layout.Footer>
-        Тестовое задание от кандидата Екатерины Гулевич{" "}
+        Тестовое задание от кандидата Екатерины Гулевич. Telegram:
         <Typography.Text code copyable>
           @meteorgul
         </Typography.Text>

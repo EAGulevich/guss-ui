@@ -22,8 +22,10 @@ const LoginPage = () => {
       role: "admin",
     };
     setUser(response);
-    navigate(ROUTES.ROUNDS.path);
+    navigate(ROUTES.ROUNDS.to);
   };
+
+  // TODO: Имя страницы в шапку добавить
 
   return (
     <LoginPageWrapper gap="middle" align="center" justify="center">

@@ -5,7 +5,7 @@ import { LayoutForPages } from "./pages/Layout.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import RoundPage from "./pages/RoundPage.tsx";
-import RoundListPage from "./pages/RoundsListPage.tsx";
+import RoundListPage from "./pages/RoundsListPage/RoundsListPage.tsx";
 import { ROUTES } from "./routes.ts";
 
 const themeConfig: ThemeConfig = { algorithm: theme.darkAlgorithm };
