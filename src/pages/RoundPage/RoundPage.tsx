@@ -21,7 +21,7 @@ const RoundPage = () => {
   useEffect(() => {
     const fetchInfo = async () => {
       const response = await axios.get<RoundInfo>(
-        `http://localhost:3000/rounds/${id}`,
+        `https://guss-service-production.up.railway.app/rounds/${id}`,
         {
           withCredentials: true,
         },
@@ -36,7 +36,7 @@ const RoundPage = () => {
 
   const handleTap = async () => {
     const response = await axios.post<{ myPoints: 61 }>(
-      `http://localhost:3000/rounds/${id}/tap`,
+      `https://guss-service-production.up.railway.app/rounds/${id}/tap`,
       {},
       { withCredentials: true },
     );
