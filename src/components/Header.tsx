@@ -11,7 +11,6 @@ export const Header = () => {
   const user = useUserStore((state) => state.user);
   // TODO: Войти /   Список РАУНДОВ     /   Раунды    /  Cooldown /   Раунд завершен
 
-
   return (
     <Flex
       justify={"space-between"}

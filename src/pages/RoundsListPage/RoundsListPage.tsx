@@ -20,10 +20,9 @@ const RoundListPage = () => {
 
   useEffect(() => {
     const fetchRounds = async () => {
-      const response = await axios.get<Round[]>(
-        "https://guss-service-production.up.railway.app/rounds",
-        { withCredentials: true },
-      );
+      const response = await axios.get<Round[]>("/api/rounds", {
+        withCredentials: true,
+      });
 
       setRounds(response.data);
     };
@@ -33,7 +32,7 @@ const RoundListPage = () => {
   const createRound = async () => {
     try {
       const response = await axios.post<{ round: Round }>(
-        "https://guss-service-production.up.railway.app/rounds",
+        "/api/rounds",
         {
           /* данные для создания раунда */
         },
