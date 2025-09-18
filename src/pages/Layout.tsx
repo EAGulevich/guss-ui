@@ -29,7 +29,7 @@ export const LayoutForPages: FC<PropsWithChildren> = ({ children }) => {
         </Typography.Text>
         <Flex justify={"space-between"}>
           <Link to="/">Login</Link>
-          <Link to="/round/456">round 456</Link>
+          <Link to="/rounds/456">round 456</Link>
           <Link to="/rounds">rounds</Link>
           <Link to="/sdaf">not found</Link>
         </Flex>
