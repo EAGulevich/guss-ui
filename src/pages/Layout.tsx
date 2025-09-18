@@ -1,5 +1,6 @@
 import type { CSSProperties, FC, PropsWithChildren } from "react";
-import { Layout, Typography } from "antd";
+import { Link } from "react-router-dom";
+import { Flex, Layout, Typography } from "antd";
 
 import { Header } from "../components/Header.tsx";
 
@@ -26,6 +27,12 @@ export const LayoutForPages: FC<PropsWithChildren> = ({ children }) => {
         <Typography.Text code copyable>
           @meteorgul
         </Typography.Text>
+        <Flex justify={"space-between"}>
+          <Link to="/">Login</Link>
+          <Link to="/round/456">round 456</Link>
+          <Link to="/rounds">rounds</Link>
+          <Link to="/sdaf">not found</Link>
+        </Flex>
       </Layout.Footer>
     </Layout>
   );

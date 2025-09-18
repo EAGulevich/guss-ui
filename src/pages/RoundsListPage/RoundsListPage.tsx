@@ -78,6 +78,7 @@ const RoundListPage = () => {
                     {/* TODO {new Date(round.startDate).toLocaleString()}) */}
                     End: {round.endDate}
                   </div>
+                  <div>Статус: TODO</div>
                 </CardWrapper>
               </RoundItem>
             ))}
