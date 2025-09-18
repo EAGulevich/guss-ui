@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Col, List, Row } from "antd";
+import axios from "axios";
 
 import { ROUTES } from "../../routes.ts";
 import { useUserStore } from "../../store.ts";
@@ -19,32 +20,31 @@ const RoundListPage = () => {
 
   useEffect(() => {
     const fetchRounds = async () => {
-      // TODO: запрос до раундов
-      const response: Round[] = [
-        {
-          id: "8c3eed83-8a8a-41a0-8f91-9ad501e8f8a1",
-          startDate: "18.05.2025, 06:28:17",
-          endDate: "18.05.2025, 06:29:17",
-        },
-        {
-          id: "8c3eed83-8a8a-41a0-8f91-9ad501e8f100",
-          startDate: "18.05.2025, 03:28:17",
-          endDate: "18.05.2025, 04:29:17",
-        },
-      ];
-      setRounds(response);
+      const response = await axios.get<Round[]>(
+        "http://localhost:3000/rounds",
+        { withCredentials: true },
+      );
+
+      setRounds(response.data);
     };
     fetchRounds();
   }, []);
 
   const createRound = async () => {
-    // TODO: запрос на новый раунд
-    const response: Round = {
-      id: "8c3eed83-8a8a-41a0-8f91-9ad501e8f8a2",
-      startDate: "18.05.2025, 07:28:17",
-      endDate: "18.05.2025, 08:29:17",
-    };
-    navigate(`${ROUTES.ROUND.to({ id: response.id })}`);
+    try {
+      const response = await axios.post<Round>(
+        "http://localhost:3000/rounds",
+        {
+          /* данные для создания раунда */
+        },
+        { withCredentials: true },
+      );
+
+      navigate(`${ROUTES.ROUND.to({ id: response.data.id })}`);
+    } catch (error) {
+      //   todo
+      console.log(error);
+    }
   };
 
   const goToRound = (roundId: string) =>
