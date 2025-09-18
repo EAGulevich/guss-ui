@@ -78,7 +78,8 @@ const RoundListPage = () => {
                     {/* TODO {new Date(round.startDate).toLocaleString()}) */}
                     End: {round.endDate}
                   </div>
-                  <div>Статус: TODO</div>
+                  {/*TODO: пересчитывать значение с течением времени*/}
+                  <div>Статус: Cooldown Активен Завершен</div>
                 </CardWrapper>
               </RoundItem>
             ))}

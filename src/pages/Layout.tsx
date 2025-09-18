@@ -16,6 +16,8 @@ const contentStyles: CSSProperties = {
 };
 
 export const LayoutForPages: FC<PropsWithChildren> = ({ children }) => {
+  //   TODO: реализовать редирект на страницу логина, если не авторизован
+  // TODO: логотип + иконка приложения
   return (
     <Layout style={layoutStyles}>
       <Layout.Header>
