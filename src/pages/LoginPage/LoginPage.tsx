@@ -21,7 +21,7 @@ const LoginPage = () => {
       const res = await axios.post<{
         user: { id: string; username: string; role: string };
       }>(
-        "http://localhost:3000/auth/login",
+        "guss-service-production.up.railway.app/auth/login",
         { username: values.username, password: values.password },
         { withCredentials: true },
       );
