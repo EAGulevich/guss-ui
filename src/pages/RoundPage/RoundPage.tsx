@@ -43,7 +43,11 @@ const RoundPage = () => {
 
   return (
     <div>
-      <div onClick={handleTap} style={{ cursor: "cell" }} title={"ТАПАЙ"}>
+      <div
+        onClick={handleTap}
+        style={{ cursor: "cell" }}
+        title={"Гусь подхватил мутацию G-42, ТАПАЙ"}
+      >
         <pre style={{ userSelect: "none" }}>{GUSS}</pre>
       </div>
       <div>round info</div>

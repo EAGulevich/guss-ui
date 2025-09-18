@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Form, type FormProps, Input } from "antd";
+import axios from "axios";
 
 import { ROUTES } from "../../routes.ts";
 import { useUserStore } from "../../store.ts";
@@ -15,14 +16,21 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleLogin: FormProps<FieldType>["onFinish"] = async (values) => {
-    // TODO: запрос на логинизацию
-    const response = {
-      id: "1",
-      username: values.username,
-      role: "admin",
-    };
-    setUser(response);
-    navigate(ROUTES.ROUNDS.to);
+    try {
+      // TODO: ТИПИЗАЦИЯ
+      const res = await axios.post<{
+        user: { id: string; username: string; role: string };
+      }>(
+        "http://localhost:3000/auth/login",
+        { username: values.username, password: values.password },
+        { withCredentials: true },
+      );
+      setUser(res.data.user);
+      navigate(ROUTES.ROUNDS.to);
+    } catch (err) {
+      // TODO
+      console.log(err);
+    }
   };
 
   // TODO: Имя страницы в шапку добавить
