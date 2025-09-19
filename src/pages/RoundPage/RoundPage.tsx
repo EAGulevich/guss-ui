@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Card, Divider, Flex, message } from "antd";
@@ -9,6 +9,7 @@ import { ActiveInfo } from "./parts/ActiveInfo.tsx";
 import { Cooldown } from "./parts/Cooldown.tsx";
 import { FinishStats } from "./parts/FinishStats.tsx";
 import { GUSS } from "./GUSS.ts";
+import quack from "./quack.mp3";
 
 interface RoundInfo {
   round: { id: string; startDate: string; endDate: string; totalPoints: 10 };
@@ -19,6 +20,7 @@ interface RoundInfo {
 
 const RoundPage = () => {
   const navigate = useNavigate();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [messageApi, contextHolder] = message.useMessage({
     maxCount: 3,
@@ -26,6 +28,18 @@ const RoundPage = () => {
   const { id } = useParams<{ id: string }>();
   const [info, setInfo] = useState<RoundInfo | null>(null);
   const [points, setPoints] = useState<number>(0);
+
+  useEffect(() => {
+    audioRef.current = new Audio(quack);
+    audioRef.current.preload = "auto";
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const fetchInfo = async () => {
@@ -43,6 +57,15 @@ const RoundPage = () => {
   }, [id, info?.status]);
 
   const handleTap = async () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      if (audioRef.current.play) {
+        audioRef.current.play().catch((err) => {
+          console.error(err);
+        });
+      }
+    }
+
     api.post<{ myPoints: number }>(`/rounds/${id}/tap`).catch((err) => {
       messageApi.open({
         type: "error",
