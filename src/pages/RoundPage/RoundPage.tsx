@@ -31,26 +31,23 @@ const RoundPage = () => {
     const fetchInfo = async () => {
       const response = await api.get<RoundInfo>(`/rounds/${id}`, {});
       setInfo(response.data);
+      setPoints(response.data.myPoints);
     };
     fetchInfo();
-    const interval = setInterval(fetchInfo, 2500);
+    const interval = setInterval(() => {
+      if (info?.status !== "finished") {
+        fetchInfo();
+      }
+    }, 2500);
     return () => clearInterval(interval);
-  }, [id]);
+  }, [id, info?.status]);
 
   const handleTap = async () => {
-    try {
-      await api
-        .post<{ myPoints: number }>(`/rounds/${id}/tap`)
-        .then((response) => {
-          setPoints(response.data.myPoints);
-        });
-    } catch (err) {
+    api.post<{ myPoints: number }>(`/rounds/${id}/tap`).catch((err) => {
       messageApi.open({
         type: "error",
+        key: "ROUND_NOT_ACTIVE",
         content:
-          // TODO: затипизировать
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
           err?.response?.data?.error === "ROUND_NOT_ACTIVE"
             ? info?.status === "pending"
               ? "Гусь еще не готов"
@@ -58,7 +55,7 @@ const RoundPage = () => {
             : "Что-то не так... Попробуйте перезагрузить страницу",
         duration: 5,
       });
-    }
+    });
   };
 
   if (!info) {
