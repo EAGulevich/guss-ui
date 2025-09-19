@@ -1,26 +1,37 @@
 import type { CSSProperties } from "react";
-import { Flex, Typography } from "antd";
+import { useLocation } from "react-router-dom";
+import { Avatar, Flex, Popover, Typography } from "antd";
 
 import { useUserStore } from "../store.ts";
+import { getTabName } from "./getTabName.helper.ts";
 
 const headerContentStyles: CSSProperties = {
   height: "100%",
 };
 
-export const Header = () => {
-  const user = useUserStore((state) => state.user);
-  // TODO: Войти /   Список РАУНДОВ     /   Раунды    /  Cooldown /   Раунд завершен
+const tabNameStyle: CSSProperties = {
+  margin: "0 auto",
+};
 
+export const Header = () => {
+  const { pathname } = useLocation();
+  const user = useUserStore((state) => state.user);
+
+  const tabName = getTabName(pathname);
+  const userName = user?.username;
   return (
-    <Flex
-      justify={"space-between"}
-      align={"center"}
-      style={headerContentStyles}
-    >
-      <Typography.Text> todo tabName</Typography.Text>
-      <Typography.Text>
-        {user?.username} - {user?.role}
-      </Typography.Text>
+    <Flex justify={"end"} align={"center"} style={headerContentStyles}>
+      <Typography.Text style={tabNameStyle}>{tabName}</Typography.Text>
+
+      {userName && (
+        <Popover
+          placement={"bottomLeft"}
+          content={`Моя роль в этом мире - ${user?.role}`}
+          title={`Я не гусь, я ${userName.toUpperCase()}`}
+        >
+          <Avatar>{userName[0].toUpperCase()}</Avatar>
+        </Popover>
+      )}
     </Flex>
   );
 };

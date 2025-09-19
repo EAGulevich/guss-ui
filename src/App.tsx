@@ -12,8 +12,9 @@ const themeConfig: ThemeConfig = {
   algorithm: theme.darkAlgorithm,
   components: {
     Layout: {
-      headerBg: "#001529",
-      footerBg: "#001529",
+      headerBg: "#141414",
+      footerBg: "#141414",
+      bodyBg: "#151b23",
     },
   },
 };

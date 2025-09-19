@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Typography } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Button, Card, Divider, Flex, message } from "antd";
 
 import { api } from "../../api/api.ts";
+import { ROUTES } from "../../routes.ts";
+import { ActiveInfo } from "./parts/ActiveInfo.tsx";
+import { Cooldown } from "./parts/Cooldown.tsx";
+import { FinishStats } from "./parts/FinishStats.tsx";
 import { GUSS } from "./GUSS.ts";
 
 interface RoundInfo {
@@ -13,7 +18,11 @@ interface RoundInfo {
 }
 
 const RoundPage = () => {
-  // TODO: типизация параметров
+  const navigate = useNavigate();
+
+  const [messageApi, contextHolder] = message.useMessage({
+    maxCount: 3,
+  });
   const { id } = useParams<{ id: string }>();
   const [info, setInfo] = useState<RoundInfo | null>(null);
   const [points, setPoints] = useState<number>(0);
@@ -24,49 +33,78 @@ const RoundPage = () => {
       setInfo(response.data);
     };
     fetchInfo();
-    //   TODO: константа
-    const interval = setInterval(fetchInfo, 3000); // TODO: компонент счетчик должен быть, в зеленый когда стейт совпал, серый - из компонента стейт
+    const interval = setInterval(fetchInfo, 2500);
     return () => clearInterval(interval);
   }, [id]);
 
   const handleTap = async () => {
-    const response = await api.post<{ myPoints: number }>(`/rounds/${id}/tap`);
-    setPoints(response.data.myPoints);
-    // TODO: обработать ошибку
+    try {
+      const response = await api.post<{ myPoints: number }>(
+        `/rounds/${id}/tap`,
+      );
+      setPoints(response.data.myPoints);
+    } catch (err) {
+      messageApi.open({
+        type: "error",
+        content:
+          // TODO: затипизировать
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          err?.response?.data?.error === "ROUND_NOT_ACTIVE"
+            ? info?.status === "pending"
+              ? "Гусь еще не готов"
+              : "Остановись, поздно уже тапать"
+            : "Что-то не так... Попробуйте перезагрузить страницу",
+        duration: 5,
+      });
+    }
   };
 
-  if (!info) return <Typography>Loading...</Typography>;
+  if (!info) {
+    return (
+      <Flex justify={"center"} style={{ margin: "40px auto" }}>
+        <LoadingOutlined style={{ fontSize: 40 }} />
+      </Flex>
+    );
+  }
 
   return (
-    <div>
-      <div
+    <Flex
+      style={{ width: "100%", height: "100%" }}
+      align={"center"}
+      justify={"center"}
+      vertical
+    >
+      {contextHolder}
+
+      <Card
         onClick={handleTap}
         style={{ cursor: "cell" }}
-        title={"Гусь подхватил мутацию G-42, ТАПАЙ"}
+        title={"Обнаружена мутация G-42, ТАПАЙ"}
       >
         <pre style={{ userSelect: "none" }}>{GUSS}</pre>
-      </div>
-      {info.status === "active" && (
-        <div>
-          <div>Раунд активен!</div>
-          <div>До конца осталось: 00:23 TODO</div>
-          <div>Мои очки - {points}</div>
+
+        <Divider />
+        <div style={{ height: "100px" }}>
+          {info.status === "active" && (
+            <ActiveInfo points={points} endDate={info.round.endDate} />
+          )}
+          {info.status === "pending" && (
+            <Cooldown startDate={info.round.startDate} />
+          )}
+          {info.status === "finished" && (
+            <FinishStats
+              totalPoints={info.round.totalPoints}
+              myPoints={info.myPoints}
+              winner={info.winner || ""}
+            />
+          )}
         </div>
-      )}
-      {info.status === "pending" && (
-        <div>
-          <div>Cooldown </div>
-          <div>До начала раунда: 00:15 TODO</div>
-        </div>
-      )}
-      {info.status === "finished" && (
-        <div>
-          <div>Всего {info.round.totalPoints} </div>
-          <div>Победитель - {info.winner}</div>
-          <div>Мои очки - {info.myPoints}</div>
-        </div>
-      )}
-    </div>
+      </Card>
+      <Button type={"text"} ghost onClick={() => navigate(ROUTES.ROUNDS.to)}>
+        Все раунды
+      </Button>
+    </Flex>
   );
 };
 

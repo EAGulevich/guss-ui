@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Col, List, Row } from "antd";
+import { Button, Col, List, message, Row } from "antd";
 
 import { api } from "../../api/api.ts";
 import { ROUTES } from "../../routes.ts";
 import { useUserStore } from "../../store.ts";
-import { CardWrapper, RoundItem, RoundsListPageWrapper } from "./styles.tsx";
+import { RoundItem } from "./parts/RoundItem.tsx";
+import { RoundsListPageWrapper } from "./styles.tsx";
 
 interface Round {
   id: string;
@@ -14,6 +15,7 @@ interface Round {
 }
 
 const RoundListPage = () => {
+  const [messageApi, contextHolder] = message.useMessage({ maxCount: 3 });
   const [rounds, setRounds] = useState<Round[]>([]);
   const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
@@ -30,19 +32,24 @@ const RoundListPage = () => {
   const createRound = async () => {
     try {
       const response = await api.post<{ round: Round }>("/rounds");
-
       navigate(`${ROUTES.ROUND.to({ id: response.data.round.id })}`);
-    } catch (error) {
-      //   todo
-      console.log(error);
+    } catch (err) {
+      messageApi.open({
+        type: "error",
+        content:
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          err?.response?.data?.error === "FORBIDDEN"
+            ? "Гусь тебе не доверяет"
+            : "Что-то не так... Попробуйте перезагрузить страницу",
+        duration: 5,
+      });
     }
   };
 
-  const goToRound = (roundId: string) =>
-    navigate(`${ROUTES.ROUND.to({ id: roundId })}`);
-
   return (
     <RoundsListPageWrapper>
+      {contextHolder}
       {user?.role === "admin" && (
         <Row key="createRound">
           <Col span={24}>
@@ -54,25 +61,7 @@ const RoundListPage = () => {
         <Col span={24}>
           <List>
             {rounds.map((round) => (
-              <RoundItem
-                key={round.id}
-                onClick={goToRound.bind(null, round.id)}
-              >
-                <CardWrapper>
-                  {/*TODO: возможность скопировать ссылку, чтобы пригласить в игру*/}
-                  <div>[Индикатор] Round ID: {round.id}</div>
-                  <div>
-                    {/* TODO {new Date(round.startDate).toLocaleString()}) */}
-                    Start: {round.startDate}
-                  </div>
-                  <div>
-                    {/* TODO {new Date(round.startDate).toLocaleString()}) */}
-                    End: {round.endDate}
-                  </div>
-                  {/*TODO: пересчитывать значение с течением времени*/}
-                  <div>Статус: Cooldown Активен Завершен</div>
-                </CardWrapper>
-              </RoundItem>
+              <RoundItem key={round.id} round={round} />
             ))}
           </List>
         </Col>
