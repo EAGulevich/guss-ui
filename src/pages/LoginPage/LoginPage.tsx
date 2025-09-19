@@ -69,12 +69,22 @@ const LoginPage = () => {
   const handleLogin: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
       setIsLoading(true);
-      const res = await api.post<{
-        user: { id: string; username: string; role: string };
-      }>("/auth/login", {
-        username: values.username,
-        password: values.password,
-      });
+      const res = await api
+        .post<{
+          user: { id: string; username: string; role: string };
+          token: string;
+        }>("/auth/login", {
+          username: values.username,
+          password: values.password,
+        })
+        .then((res) => {
+          if (res.data.token) {
+            localStorage.setItem("token", res.data.token);
+          }
+
+          return res;
+        });
+
       setIsLoading(false);
       setUser(res.data.user);
       navigate(ROUTES.ROUNDS.to);
