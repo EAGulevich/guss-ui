@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ConfigProvider, theme, type ThemeConfig } from "antd";
 
+import BonusPage from "./pages/BonusPage/Bonus.tsx";
 import { LayoutForPages } from "./pages/Layout.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
@@ -28,6 +29,7 @@ function App() {
             <Route path={ROUTES.LOGIN.path} element={<LoginPage />} />
             <Route path={ROUTES.ROUNDS.path} element={<RoundListPage />} />
             <Route path={ROUTES.ROUND.path} element={<RoundPage />} />
+            <Route path={ROUTES.BONUS.path} element={<BonusPage />} />
             <Route path={ROUTES.NOT_FOUND.path} element={<NotFoundPage />} />
           </Routes>
         </LayoutForPages>

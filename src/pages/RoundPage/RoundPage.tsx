@@ -39,10 +39,11 @@ const RoundPage = () => {
 
   const handleTap = async () => {
     try {
-      const response = await api.post<{ myPoints: number }>(
-        `/rounds/${id}/tap`,
-      );
-      setPoints(response.data.myPoints);
+      await api
+        .post<{ myPoints: number }>(`/rounds/${id}/tap`)
+        .then((response) => {
+          setPoints(response.data.myPoints);
+        });
     } catch (err) {
       messageApi.open({
         type: "error",
